@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import sys
 
-#going to change to take arg for county
+#todo fix args 
 chosencounty = sys.argv[1]
 chosenstate = sys.argv[2]
 print(chosencounty)
