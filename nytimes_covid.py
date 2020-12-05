@@ -75,7 +75,7 @@ def plotCovid(rows):
 
 
     fig.set_size_inches(15, 15)
-    plt.savefig("COVID_plots.png", dpi = 100)
+    plt.savefig(f"{chosencounty.capitalize()}_County_COVID_plots.png", dpi = 100)
 
 
 
@@ -86,7 +86,6 @@ if __name__ == '__main__':
 
     curledCsv = f'{chosencounty.capitalize()}_County_nytimes.csv'
     rows = countyRows(curledCsv)
-    print(rows)
     plotCovid(rows)
 
 
