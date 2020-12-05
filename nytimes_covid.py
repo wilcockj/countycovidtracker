@@ -11,6 +11,7 @@ import sys
 
 #going to change to take arg for county
 chosencounty = sys.argv[1]
+chosenstate = sys.argv[2]
 print(chosencounty)
 def countyRows(file): # Parses CSVs
     head = ['date','county','state','fips','cases','deaths']
@@ -80,7 +81,7 @@ def plotCovid(rows):
 
 if __name__ == '__main__':
     if '-getdata' in sys.argv:
-        os.system(f'curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv" | grep {chosencounty.capitalize()} > {chosencounty.capitalize()}_County_nytimes.csv')
+        os.system(f'curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv" | grep {chosencounty.capitalize()},{chosenstate.capitalize()} > {chosencounty.capitalize()}_County_nytimes.csv')
         print('Curling NY times COVID-19 CSV')
 
     curledCsv = f'{chosencounty.capitalize()}_County_nytimes.csv'
