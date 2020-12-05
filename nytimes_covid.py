@@ -88,7 +88,7 @@ if __name__ == '__main__':
     rows = countyRows(curledCsv)
     plotCovid(rows)
 
-
+    os.system(f"explorer.exe {chosencounty.capitalize()}_County_COVID_plots.png")
     finalRows = [['Date', 'Cases', 'Deaths']] + [i for i in reversed(rowStr(rows))]
 
     outputCsv = f'All_{chosencounty.capitalize()}_Data_Provided--{finalRows[1][0]}.csv'
