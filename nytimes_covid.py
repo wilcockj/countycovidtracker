@@ -132,8 +132,8 @@ if __name__ == '__main__':
         #need to grep for each county, maybe make the csv then delete
         for county in counties:
             filename = county.replace(' ','_')
-            print(f'grep -i "{county}" {chosenstate.capitalize()}_nytimes.csv > {filename}temp.csv')
-            os.system(f'grep -i "{county}" {chosenstate.capitalize()}_nytimes.csv > {filename}temp.csv')
+            print(f'rg -i "{county}" {chosenstate.capitalize()}_nytimes.csv > {filename}temp.csv')
+            os.system(f'rg -i "{county}" {chosenstate.capitalize()}_nytimes.csv > {filename}temp.csv')
             curledCsv = f'{filename}temp.csv'
             rows = countyRows(curledCsv,county)
             plotCovid(rows,county,sys.argv[1])
