@@ -49,8 +49,6 @@ def plotCovid(rows,chosencounty,state):
     cases = [int(i[-2]) for i in rows[1:]]
     deaths = [int(i[-1]) for i in rows[1:]]
     date = '/'.join(rows[-1][0].split('-')[1:] + [rows[-1][0].split('-')[0]])
-    if chosencounty == state:
-        print(cases)
     # Create 2x2 sub plots
     gs = gridspec.GridSpec(2, 2)
 
@@ -98,9 +96,9 @@ def plotCovid(rows,chosencounty,state):
     if not os.path.exists(f'graphs\{state}\\'):
         os.makedirs(f'graphs\{state}\\')
     if chosencounty == state:
-        plt.savefig(f"graphs\{chosencounty.capitalize()}_COVID_plots.png", dpi = 100)
+        plt.savefig(f"graphs\{chosencounty.capitalize().replace(' ','_')}_COVID_plots.png", dpi = 100)
     else:
-        plt.savefig(f"graphs\{state}\{chosencounty.capitalize()}_County_COVID_plots.png", dpi = 100)
+        plt.savefig(f"graphs\{state}\{chosencounty.capitalize().replace(' ','_')}_County_COVID_plots.png", dpi = 100)
     plt.close()
 
 
@@ -154,21 +152,24 @@ if __name__ == '__main__':
         for state in state_names:
             counties = list(countieslist[state.title()].keys())
             print(state)
+            os.system(f'rg ",{state}" Covid_nytimes.csv > {state.replace(" ","_")}temp.csv')
             for county in counties:
-                print(f'rg -i "{county.title().replace("county","").replace("County","").strip()},{state}" Covid_nytimes.csv > {county.replace("county","").strip().replace(" " ,"_")}temp.csv')
-                os.system(f'rg -i "{county.title().replace("county","").replace("County","").strip()},{state}" Covid_nytimes.csv > {county.replace("county","").strip().replace(" " ,"_")}temp.csv')
-                curledCsv = f"{county.replace('county','').strip().replace(' ','_')}temp.csv"
-                county = county.replace("county","").replace("County","")
-                rows = countyRows(curledCsv,county)
-                plotCovid(rows,county,state)
+                countyname = county.replace("county","").replace("County","").strip()
+                filename = county.replace("county","").strip().replace(" " ,"_") + "countytemp.csv"
+                print(f'rg -i "{countyname},{state}" {state.replace(" ","_")}temp.csv > {filename}')
+                os.system(f'rg -i "{countyname},{state}" {state.replace(" ","_")}temp.csv > {filename}')
+                curledCsv = f"{filename}"
+                rows = countyRows(curledCsv,countyname)
+                plotCovid(rows,countyname,state)
                 os.system(f'del {curledCsv}')
+            os.system(f'del {state.replace(" ","_")}temp.csv')
             #need to curl new csv https://github.com/nytimes/covid-19-data/blob/master/us-states.csv
             curledCsv = f'states_covid_data.csv'
             os.system(f'rg ",{state}" {curledCsv} > {state.replace(" ","_")}temp.csv')
-            curledCsv = f'{state}temp.csv'
+            curledCsv = f'{state.replace(" ","_")}temp.csv'
             rows = countyRows(curledCsv,state)
             plotCovid(rows,state,state)
-            os.system(f'del {state}temp.csv')
+            os.system(f'del {state.replace(" ","_")}temp.csv')
 
     
 
