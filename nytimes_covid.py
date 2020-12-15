@@ -128,11 +128,11 @@ if __name__ == '__main__':
         print('Curling NY times COVID-19 CSV one state only')
         chosenstate = sys.argv[1]
         os.system(
-            f'curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv" | rg "{chosenstate.capitalize()}" > {chosenstate.capitalize()}_nytimes.csv')
+            f'curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv" | rg "{chosenstate.title()}" > {chosenstate.capitalize().replace(" ","_")}_nytimes.csv')
         print(
-            f'curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv" | rg "{chosenstate.capitalize()}" > states_covid_data.csv')
+            f'curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv" | rg "{chosenstate.title()}" > states_covid_data.csv')
         os.system(
-            f'curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv" | rg "{chosenstate.capitalize()}" > states_covid_data.csv')
+            f'curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv" | rg "{chosenstate.title()}" > states_covid_data.csv')
 
     if len(sys.argv) > 2:
         curledCsv = f'{chosencounty.capitalize().replace(" ","_")}_nytimes.csv'
@@ -151,18 +151,18 @@ if __name__ == '__main__':
             [i for i in reversed(rowStr(rows))]
     # should edit to be any state and find the list of counties
     elif len(sys.argv) == 2:
+        # one state only
         state = sys.argv[1]
-        curledCsv = f'{state.capitalize()}_nytimes.csv'
+        curledCsv = f'{state.capitalize().replace(" ","_")}_nytimes.csv'
         counties = list(x.replace('county', '').replace('County', '').strip()
-                        for x in countieslist[state.capitalize()].keys())
-        #counties = ['Baker', 'Benton', 'Clackamas', 'Clatsop', 'Columbia', 'Coos', 'Crook', 'Curry', 'Deschutes', 'Douglas', 'Gilliam', 'Grant', 'Harney', 'Hood', 'River', 'Jackson', 'Jefferson', 'Josephine', 'Klamath', 'Lake', 'Lane', 'Lincoln', 'Linn', 'Malheur', 'Marion', 'Morrow', 'Multnomah', 'Polk', 'Sherman', 'Tillamook', 'Umatilla', 'Union', 'Wallowa', 'Wasco', 'Washington', 'Wheeler', 'Yamhill']
+                        for x in countieslist[state.title()].keys())
         # need to grep for each county, maybe make the csv then delete
         for county in counties:
             filename = county.replace(' ', '_')
             print(
-                f'rg -i "{county}" {state.capitalize()}_nytimes.csv > {filename}temp.csv')
+                f'rg -i "{county}" {state.capitalize().replace(" ","_")}_nytimes.csv > {filename}temp.csv')
             os.system(
-                f'rg -i "{county}" {state.capitalize()}_nytimes.csv > {filename}temp.csv')
+                f'rg -i "{county}" {state.capitalize().replace(" ","_")}_nytimes.csv > {filename}temp.csv')
             curledCsv = f'{filename}temp.csv'
             rows = countyRows(curledCsv, county)
             plotCovid(rows, county, state)
@@ -171,10 +171,10 @@ if __name__ == '__main__':
         curledCsv = f'states_covid_data.csv'
         rows = countyRows(curledCsv, state)
         plotCovid(rows, state, state)
+        os.remove(f'{state.capitalize().replace(" ","_")}_nytimes.csv')
 
     else:
         curledCsv = f'Covid_nytimes.csv'
-        print(sys.argv)
 
         #counties = ['Baker', 'Benton', 'Clackamas', 'Clatsop', 'Columbia', 'Coos', 'Crook', 'Curry', 'Deschutes', 'Douglas', 'Gilliam', 'Grant', 'Harney', 'Hood', 'River', 'Jackson', 'Jefferson', 'Josephine', 'Klamath', 'Lake', 'Lane', 'Lincoln', 'Linn', 'Malheur', 'Marion', 'Morrow', 'Multnomah', 'Polk', 'Sherman', 'Tillamook', 'Umatilla', 'Union', 'Wallowa', 'Wasco', 'Washington', 'Wheeler', 'Yamhill']
         # need to grep for each county, maybe make the csv then delete
